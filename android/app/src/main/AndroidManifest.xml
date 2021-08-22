@@ -2,7 +2,7 @@
     package="com.example.cozy_kos">
    <application
         android:label="cozy_kos"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

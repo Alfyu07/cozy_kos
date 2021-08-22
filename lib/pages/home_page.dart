@@ -1,11 +1,13 @@
 import 'package:cozy_kos/models/city.dart';
 import 'package:cozy_kos/models/space.dart';
 import 'package:cozy_kos/models/tips.dart';
+import 'package:cozy_kos/providers/space_provider.dart';
 import 'package:cozy_kos/widgets/bottom_navbar_item.dart';
 import 'package:cozy_kos/widgets/city_card.dart';
 import 'package:cozy_kos/widgets/space_card.dart';
 import 'package:cozy_kos/widgets/tips_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../theme.dart';
 
@@ -14,6 +16,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final spaceProvider = Provider.of<SpaceProvider>(context);
+
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -90,47 +94,34 @@ class HomePage extends StatelessWidget {
                   style: regularTextStyle.copyWith(fontSize: 16),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Padding(
                 padding: EdgeInsets.only(left: edge),
-                child: Column(
-                  children: [
-                    SpaceCard(
-                      space: Space(
-                        id: 1,
-                        name: "Kuretakeso Hott",
-                        price: 52,
-                        city: "Bandung",
-                        country: "Germany",
-                        imageUrl: 'assets/space1.png',
-                        rating: 4,
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SpaceCard(
-                      space: Space(
-                        id: 2,
-                        name: "Roemah Nenek",
-                        price: 11,
-                        city: "Seattle",
-                        country: "Bogor",
-                        imageUrl: 'assets/space2.png',
-                        rating: 5,
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SpaceCard(
-                      space: Space(
-                        id: 3,
-                        name: "Darrling How",
-                        price: 20,
-                        city: "Jakarta",
-                        country: "Indonesia",
-                        imageUrl: 'assets/space3.png',
-                        rating: 3,
-                      ),
-                    ),
-                  ],
+                child: FutureBuilder(
+                  future: spaceProvider.getRecommendedSpace(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<Space>? spaces = snapshot.data as List<Space>?;
+                      if (spaces != null) {
+                        return Column(
+                          children: spaces
+                              .map(
+                                (e) => Container(
+                                  margin: EdgeInsets.only(
+                                    top: e == spaces.first ? 0 : 30,
+                                  ),
+                                  child: SpaceCard(space: e),
+                                ),
+                              )
+                              .toList(),
+                        );
+                      } else {
+                        return const Center(child: Text('There is No Data'));
+                      }
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
               ),
 
