@@ -1,4 +1,4 @@
-package com.example.cozy_kos
+package com.alfyu.cozy_kos
 
 import io.flutter.embedding.android.FlutterActivity
 
