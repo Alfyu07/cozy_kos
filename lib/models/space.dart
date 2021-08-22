@@ -13,6 +13,7 @@ class Space {
   int? numberOfKitchens;
   int? numberOfBedrooms;
   int? numberOfCupboards;
+  bool isWished;
 
   Space({
     this.id,
@@ -29,6 +30,7 @@ class Space {
     this.numberOfKitchens,
     this.numberOfBedrooms,
     this.numberOfCupboards,
+    this.isWished = false,
   });
 
   factory Space.fromJson(Map<String, dynamic> json) => Space(

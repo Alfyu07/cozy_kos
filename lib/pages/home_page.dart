@@ -1,3 +1,4 @@
+import 'package:cozy_kos/api/bwa_api.dart';
 import 'package:cozy_kos/models/city.dart';
 import 'package:cozy_kos/models/space.dart';
 import 'package:cozy_kos/models/tips.dart';
@@ -82,6 +83,31 @@ class HomePage extends StatelessWidget {
                         imageUrl: 'assets/city3.png',
                       ),
                     ),
+                    const SizedBox(width: 20),
+                    CityCard(
+                      City(
+                        id: 4,
+                        name: 'Palembang',
+                        imageUrl: 'assets/city4.png',
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    CityCard(
+                      City(
+                        id: 5,
+                        name: 'Aceh',
+                        imageUrl: 'assets/city5.png',
+                        isPopular: true,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    CityCard(
+                      City(
+                        id: 6,
+                        name: 'Bogor',
+                        imageUrl: 'assets/city6.png',
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -98,26 +124,25 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: edge),
                 child: FutureBuilder(
-                  future: spaceProvider.getRecommendedSpace(),
+                  future: BwaApi.getRecommendedSpace(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final List<Space>? spaces = snapshot.data as List<Space>?;
-                      if (spaces != null) {
-                        return Column(
-                          children: spaces
-                              .map(
-                                (e) => Container(
-                                  margin: EdgeInsets.only(
-                                    top: e == spaces.first ? 0 : 30,
-                                  ),
-                                  child: SpaceCard(space: e),
+
+                      final provider = Provider.of<SpaceProvider>(context);
+                      provider.setSpaces(spaces!);
+                      return Column(
+                        children: spaces
+                            .map(
+                              (e) => Container(
+                                margin: EdgeInsets.only(
+                                  top: e == spaces.first ? 0 : 30,
                                 ),
-                              )
-                              .toList(),
-                        );
-                      } else {
-                        return const Center(child: Text('There is No Data'));
-                      }
+                                child: SpaceCard(space: e),
+                              ),
+                            )
+                            .toList(),
+                      );
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }

@@ -1,8 +1,10 @@
 import 'package:cozy_kos/models/space.dart';
 import 'package:cozy_kos/pages/error_page.dart';
+import 'package:cozy_kos/providers/space_provider.dart';
 import 'package:cozy_kos/theme.dart';
 import 'package:cozy_kos/widgets/facility_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
@@ -111,9 +113,20 @@ class DetailPage extends StatelessWidget {
                     },
                     child: Image.asset('assets/btn_back.png', width: 40),
                   ),
-                  Image.asset(
-                    'assets/btn_wishlist.png',
-                    width: 40,
+                  Consumer<SpaceProvider>(
+                    builder: (context, spaceProvider, _) => InkWell(
+                      onTap: () {
+                        int index = spaceProvider.spaces.indexOf(space);
+                        spaceProvider.spaces[index].isWished =
+                            !spaceProvider.spaces[index].isWished;
+                      },
+                      child: Image.asset(
+                        space.isWished!
+                            ? 'assets/btn_wishlist_active.png'
+                            : 'assets/btn_wishlist.png',
+                        width: 40,
+                      ),
+                    ),
                   ),
                 ],
               ),
