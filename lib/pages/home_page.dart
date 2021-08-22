@@ -17,8 +17,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spaceProvider = Provider.of<SpaceProvider>(context);
-
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -198,7 +196,7 @@ class HomePage extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
+          children: const [
             BottomNavbarItem(
               imageUrl: 'assets/icon_home',
               isActive: true,

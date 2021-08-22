@@ -13,6 +13,42 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _showDialog() async {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Konfirmasi'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Do you want to call the owner?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: regularTextStyle.copyWith(color: Colors.redAccent),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                launch('tel:${space.phone}');
+              },
+              child: Text(
+                'Call',
+                style: blackTextStyle.copyWith(color: Colors.blueAccent),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
@@ -79,9 +115,7 @@ class DetailPage extends StatelessWidget {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
-                              launch('tel:${space.phone}');
-                            },
+                            onPressed: () => _showDialog(),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(17),
@@ -116,12 +150,12 @@ class DetailPage extends StatelessWidget {
                   Consumer<SpaceProvider>(
                     builder: (context, spaceProvider, _) => InkWell(
                       onTap: () {
-                        int index = spaceProvider.spaces.indexOf(space);
+                        final int index = spaceProvider.spaces.indexOf(space);
                         spaceProvider.spaces[index].isWished =
                             !spaceProvider.spaces[index].isWished;
                       },
                       child: Image.asset(
-                        space.isWished!
+                        space.isWished
                             ? 'assets/btn_wishlist_active.png'
                             : 'assets/btn_wishlist.png',
                         width: 40,
@@ -248,7 +282,8 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget buildLocation(BuildContext context) {
-    launchUrl(String urlString) async {
+    // ignore: avoid_void_async
+    void launchUrl(String urlString) async {
       if (await canLaunch(urlString)) {
         launch(urlString);
       } else {
